@@ -17,51 +17,59 @@ For example, method add_item probably accepts some kind of an item?..
 
 class CashRegister:
 
-    def __init__(self, name, price, total_items, total_price, discount):
+    def __init__(self):
 
-        self.item_name = name
-        self.item_price = price
-        self.total_items = None # {'item': 'price'}
+        self.total_items = []
         self.total_price = 0
         self.discount = 0
 
     def add_item(self, item):
-        print(f"You have added {items[name]} to the shopping basket.")
+        self.total_items.append(item)
+        print(f"You have added {item} to the shopping basket.")
 
-    def remove_item(self):
-        print(f"You have removed {items[name]} from the shopping basket.")
+    def remove_item(self, item):
+        self.total_items.remove(item)
+        print(f"You have removed {item} from the shopping basket.")
 
-    def apply_discount(self, show_items):
-        pass
-        # if items[name] * 2 = True:
-        #     then
+    def apply_discount(self):
+        """Apply a discount, buy one get one free."""
+        unique_items = []
+        cost_of_unique_items = 0
+        for item in self.total_items:
+            if item not in unique_items:
+                unique_items.append(item)
+                item_price = list(item.values())[0]
+                cost_of_unique_items = cost_of_unique_items + item_price
+        self.discount = round(self.get_total() - cost_of_unique_items, 2)
 
-    def get_total(self, items):
-        all_items = []
+    def get_total(self):
+        total_cost = 0
+        for item in self.total_items:
+            item_price = list(item.values())[0]
+            total_cost = total_cost + item_price
+        return total_cost
 
-    def show_items(self, items):
-        print(f"Your shopping basket consists of: {items.name} ")
+
+    def show_items(self):
+        print(f"Your shopping basket consists of: {self.total_items}.")
 
     def reset_register(self):
-        pass
+        self.total_items = []
+        self.total_price = 0
+        self.discount = 0
 
 
+cash_register_1 = CashRegister()
+cash_register_1.add_item({"Chocolate": 1})
+cash_register_1.add_item({"Apple": 0.3})
+cash_register_1.add_item({"Apple": 0.3})
+cash_register_1.add_item({"Notebook": 2.5})
+cash_register_1.add_item({"Pencil": 0.75})
+cash_register_1.add_item({"Pencil": 0.75})
 
-Chocolate = item(name="Chocolate", price=1)
-Apple = item(name="Apple", price=0.3)
-Notebook = item(name="Notebook", price=2.5)
-Pencil = item(name="Pencil", price=0.75)
-
-items = [Chocolate, Apple, Notebook, Pencil]
-
-# EXAMPLE code run:
-
-while True:
-    print("Which item would you like to buy?")
-    for number in range(len(items)):
-        print(f"[{number}] {items[number].name}")
-    item_number = int(input("Enter the number of your chosen item: "))
-    items[item_number].add_item()
-
-
-# ADD
+cash_register_1.show_items()
+cash_register_1.remove_item({"Chocolate": 1})
+cash_register_1.show_items()
+print(cash_register_1.get_total())
+cash_register_1.apply_discount()
+print(f"Your total discount is {cash_register_1.discount}.")
